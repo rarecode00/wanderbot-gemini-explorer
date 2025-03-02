@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -59,11 +58,14 @@ interface TravelFormProps {
   className?: string;
 }
 
+// Define the form values type to make it explicit
+type FormValues = z.infer<typeof FormSchema>;
+
 export const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, className }) => {
   const [customInterest, setCustomInterest] = useState("");
 
   // Initialize the form with default values
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       source: "",
@@ -104,6 +106,12 @@ export const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, className }) =
     }
   };
 
+  // Handle form submission and pass data to parent component
+  const handleFormSubmit = (data: FormValues) => {
+    // The data from the form matches the TravelFormData interface after form validation
+    onSubmit(data as TravelFormData);
+  };
+
   return (
     <Card className={cn("w-full max-w-lg mx-auto border border-border/50 shadow-md", className)}>
       <CardHeader className="space-y-1">
@@ -114,7 +122,7 @@ export const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, className }) =
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={control}

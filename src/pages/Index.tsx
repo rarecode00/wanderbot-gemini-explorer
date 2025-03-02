@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/use-toast";
 import TravelForm from "@/components/TravelForm";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import TravelPlan from "@/components/TravelPlan";

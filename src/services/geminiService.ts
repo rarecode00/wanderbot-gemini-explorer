@@ -3,11 +3,11 @@ import { toast } from "@/components/ui/use-toast";
 export interface TravelFormData {
   source: string;
   destination: string;
-  startDate: string;
-  endDate: string;
-  budget: string;
-  travelers: string;
-  interests: string;
+  startDate: Date;
+  endDate: Date;
+  budget: number;
+  travelers: number;
+  interests: string[];
 }
 
 export interface Activity {
@@ -61,10 +61,13 @@ export const generateTravelPlan = async (data: TravelFormData): Promise<TravelPl
     throw new Error("API key not found. Please set your Gemini API key.");
   }
 
+  const startDateStr = data.startDate.toLocaleDateString();
+  const endDateStr = data.endDate.toLocaleDateString();
+
   const prompt = `
 You are an expert travel assistant. A user wants to plan a trip from ${data.source} to ${data.destination}.
-The trip will be from ${data.startDate} to ${data.endDate}. The user has a budget of ${data.budget} and is traveling with ${data.travelers} people.
-The user is interested in ${data.interests}.
+The trip will be from ${startDateStr} to ${endDateStr}. The user has a budget of ${data.budget} and is traveling with ${data.travelers} people.
+The user is interested in ${data.interests.join(', ')}.
 
 Create a detailed travel plan with a summary, a day-by-day itinerary, a budget breakdown, and travel tips.
 
@@ -183,7 +186,6 @@ export const askFollowUpQuestion = async (
     throw new Error("API key not found. Please set your Gemini API key.");
   }
 
-  // Calculate number of days from the date range
   const daysMatch = dates.match(/\d+\/\d+\/\d+\s+to\s+\d+\/\d+\/\d+\s+\((\d+)\s+days\)/);
   const numDays = daysMatch ? parseInt(daysMatch[1]) : 1;
 
@@ -246,9 +248,13 @@ Respond directly to the user's question without referring to these instructions.
   } catch (error) {
     console.error("Error asking follow-up question:", error);
     if (error instanceof Error) {
-      toast.error("Error", { description: error.message });
+      toast({
+        title: "Error",
+        description: error.message,
+      });
     } else {
-      toast.error("Error", {
+      toast({
+        title: "Error",
         description: "An unexpected error occurred. Please try again.",
       });
     }
