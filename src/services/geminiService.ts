@@ -35,8 +35,8 @@ export interface TravelPlan {
   travelTips: string[];
 }
 
-const API_KEY_LOCAL_STORAGE_KEY = "geminiApiKey";
-const GEMINI_ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_ENV_API_KEY = "AIzaSyBsymDB6vJ8ZBKSSHVcb17NVm1M5c7jx1s";
+// const GEMINI_ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 /**
  * Get the Gemini API key from environment variable or local storage as fallback
@@ -48,7 +48,7 @@ export const getApiKey = (): string | null => {
   }
   
   // Fallback to local storage if env variable is not set
-  return localStorage.getItem(API_KEY_LOCAL_STORAGE_KEY);
+  return "";
 };
 
 /**
@@ -56,7 +56,7 @@ export const getApiKey = (): string | null => {
  * @param apiKey - The Gemini API key to set
  */
 export const setApiKey = (apiKey: string): void => {
-  localStorage.setItem(API_KEY_LOCAL_STORAGE_KEY, apiKey);
+  // localStorage.setItem(API_KEY_LOCAL_STORAGE_KEY, apiKey);
 };
 
 /**
@@ -155,12 +155,12 @@ Here's an example of the desired JSON output format:
     }
 
     try {
-      let jsonString = textResponse;
+      let jsonString = textResponse?.replace(/```json\n([\s\S]*?)\n```/g, "$1");;
       
-      const codeBlockMatch = textResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
-      if (codeBlockMatch && codeBlockMatch[1]) {
-        jsonString = codeBlockMatch[1].trim();
-      }
+      // const codeBlockMatch = textResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
+      // if (codeBlockMatch && codeBlockMatch[1]) {
+      //   jsonString = codeBlockMatch[1].trim();
+      // }
       
       console.log("Cleaned JSON string:", jsonString);
       const travelPlan = JSON.parse(jsonString) as TravelPlan;

@@ -11,31 +11,31 @@ import { cn } from "@/lib/utils";
 
 const Index = () => {
   // Only show the API key dialog if there's no API key from environment variable or local storage
-  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(!getApiKey());
+  // const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(!getApiKey());
   const [isLoading, setIsLoading] = useState(false);
   const [travelPlan, setTravelPlan] = useState<TravelPlanType | null>(null);
   const [formData, setFormData] = useState<TravelFormData | null>(null);
 
-  const handleSetApiKey = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const key = formData.get("apiKey") as string;
+  // const handleSetApiKey = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.currentTarget);
+  //   const key = formData.get("apiKey") as string;
     
-    if (key.trim()) {
-      setApiKey(key.trim());
-      setApiKeyDialogOpen(false);
-      toast({
-        title: "API Key Set",
-        description: "Your Gemini API key has been set successfully.",
-      });
-    }
-  };
+  //   if (key.trim()) {
+  //     setApiKey(key.trim());
+  //     setApiKeyDialogOpen(false);
+  //     toast({
+  //       title: "API Key Set",
+  //       description: "Your Gemini API key has been set successfully.",
+  //     });
+  //   }
+  // };
 
   const handleSubmitTravelForm = async (data: TravelFormData) => {
-    if (!getApiKey()) {
-      setApiKeyDialogOpen(true);
-      return;
-    }
+    // if (!getApiKey()) {
+    //   setApiKeyDialogOpen(true);
+    //   return;
+    // }
 
     setIsLoading(true);
     setTravelPlan(null);
@@ -65,7 +65,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* API Key Dialog - Only shown if environment variable is not set */}
-      <Dialog open={apiKeyDialogOpen} onOpenChange={setApiKeyDialogOpen}>
+      {/* <Dialog open={apiKeyDialogOpen} onOpenChange={setApiKeyDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Enter Gemini API Key</DialogTitle>
@@ -105,7 +105,7 @@ const Index = () => {
             </div>
           </form>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Header */}
       <header className="w-full bg-background py-6 border-b border-border/50">
@@ -130,7 +130,7 @@ const Index = () => {
               <h1 className="text-xl font-medium tracking-tight">WanderBot</h1>
             </div>
             
-            {getApiKey() && (
+            {/* {getApiKey() && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -139,7 +139,7 @@ const Index = () => {
               >
                 Update API Key
               </Button>
-            )}
+            )} */}
           </div>
         </div>
       </header>
@@ -278,7 +278,7 @@ const Index = () => {
             <p className="text-sm text-muted-foreground">
               WanderBot — AI-powered travel planning with Google Gemini
             </p>
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -295,7 +295,7 @@ const Index = () => {
               >
                 Gemini API
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </footer>
