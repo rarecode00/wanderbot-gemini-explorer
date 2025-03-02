@@ -1,10 +1,9 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TravelPlan as TravelPlanType } from "@/services/geminiService";
 import { formatCurrency } from "@/lib/utils";
 import ChatBox from "./ChatBox";
@@ -19,8 +18,6 @@ interface TravelPlanProps {
 }
 
 const TravelPlan: React.FC<TravelPlanProps> = ({ plan, sourceDestination }) => {
-  const [activeTab, setActiveTab] = useState("plan");
-  
   // Function to calculate the color based on the budget percentage
   const getBudgetColor = (percentage: number) => {
     if (percentage <= 20) return "bg-green-500";
@@ -31,13 +28,9 @@ const TravelPlan: React.FC<TravelPlanProps> = ({ plan, sourceDestination }) => {
   };
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-6">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="plan">Travel Plan</TabsTrigger>
-        <TabsTrigger value="chat">Chat With AI</TabsTrigger>
-      </TabsList>
-      
-      <TabsContent value="plan" className="space-y-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Travel Plan - Takes 2/3 of the space on large screens */}
+      <div className="lg:col-span-2 space-y-6">
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-2xl">{plan.summary}</CardTitle>
@@ -113,12 +106,23 @@ const TravelPlan: React.FC<TravelPlanProps> = ({ plan, sourceDestination }) => {
             </CardContent>
           </Card>
         </div>
-      </TabsContent>
+      </div>
       
-      <TabsContent value="chat">
-        <ChatBox destinationInfo={sourceDestination} />
-      </TabsContent>
-    </Tabs>
+      {/* Chat with AI - Takes 1/3 of the space on large screens */}
+      <div className="lg:col-span-1">
+        <Card className="h-full">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Chat With Travel Assistant</CardTitle>
+            <CardDescription>
+              Ask any questions about your trip to {sourceDestination.destination}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <ChatBox destinationInfo={sourceDestination} />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 
