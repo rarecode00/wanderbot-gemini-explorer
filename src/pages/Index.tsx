@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import TravelForm from "@/components/TravelForm";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import TravelPlan from "@/components/TravelPlan";
@@ -14,6 +14,7 @@ const Index = () => {
   const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(!getApiKey());
   const [isLoading, setIsLoading] = useState(false);
   const [travelPlan, setTravelPlan] = useState<TravelPlanType | null>(null);
+  const [formData, setFormData] = useState<TravelFormData | null>(null);
 
   const handleSetApiKey = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,8 +24,7 @@ const Index = () => {
     if (key.trim()) {
       setApiKey(key.trim());
       setApiKeyDialogOpen(false);
-      toast({
-        title: "API Key Set",
+      toast("API Key Set", {
         description: "Your Gemini API key has been set successfully.",
       });
     }
@@ -38,12 +38,12 @@ const Index = () => {
 
     setIsLoading(true);
     setTravelPlan(null);
+    setFormData(data);
 
     try {
       const plan = await generateTravelPlan(data);
       setTravelPlan(plan);
-      toast({
-        title: "Travel Plan Generated",
+      toast("Travel Plan Generated", {
         description: "Your customized travel itinerary is ready!",
       });
     } catch (error) {
@@ -52,6 +52,12 @@ const Index = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Format dates for display
+  const formatDateRange = (startDate: string, endDate: string) => {
+    if (!startDate || !endDate) return '';
+    return `${startDate} to ${endDate}`;
   };
 
   return (
@@ -246,7 +252,16 @@ const Index = () => {
                     Create New Plan
                   </Button>
                 </div>
-                {travelPlan && <TravelPlan plan={travelPlan} />}
+                {travelPlan && formData && (
+                  <TravelPlan 
+                    plan={travelPlan} 
+                    sourceDestination={{
+                      source: formData.source,
+                      destination: formData.destination,
+                      dates: formatDateRange(formData.startDate, formData.endDate)
+                    }}
+                  />
+                )}
               </div>
             )}
           </div>
