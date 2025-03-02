@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +23,8 @@ const Index = () => {
     if (key.trim()) {
       setApiKey(key.trim());
       setApiKeyDialogOpen(false);
-      toast("API Key Set", {
+      toast({
+        title: "API Key Set",
         description: "Your Gemini API key has been set successfully.",
       });
     }
@@ -43,7 +43,8 @@ const Index = () => {
     try {
       const plan = await generateTravelPlan(data);
       setTravelPlan(plan);
-      toast("Travel Plan Generated", {
+      toast({
+        title: "Travel Plan Generated",
         description: "Your customized travel itinerary is ready!",
       });
     } catch (error) {
@@ -55,9 +56,9 @@ const Index = () => {
   };
 
   // Format dates for display
-  const formatDateRange = (startDate: string, endDate: string) => {
+  const formatDateRange = (startDate: Date, endDate: Date) => {
     if (!startDate || !endDate) return '';
-    return `${startDate} to ${endDate}`;
+    return `${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`;
   };
 
   return (
