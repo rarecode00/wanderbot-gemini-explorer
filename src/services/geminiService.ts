@@ -148,7 +148,15 @@ Here's an example of the desired JSON output format:
     }
 
     try {
-      const travelPlan = JSON.parse(textResponse) as TravelPlan;
+      let jsonString = textResponse;
+      
+      const codeBlockMatch = textResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (codeBlockMatch && codeBlockMatch[1]) {
+        jsonString = codeBlockMatch[1].trim();
+      }
+      
+      console.log("Cleaned JSON string:", jsonString);
+      const travelPlan = JSON.parse(jsonString) as TravelPlan;
       return travelPlan;
     } catch (error) {
       console.error("Failed to parse travel plan:", error);
