@@ -10,6 +10,7 @@ import { TravelFormData, TravelPlan as TravelPlanType, generateTravelPlan, setAp
 import { cn } from "@/lib/utils";
 
 const Index = () => {
+  // Only show the API key dialog if there's no API key from environment variable or local storage
   const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(!getApiKey());
   const [isLoading, setIsLoading] = useState(false);
   const [travelPlan, setTravelPlan] = useState<TravelPlanType | null>(null);
@@ -63,7 +64,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* API Key Dialog */}
+      {/* API Key Dialog - Only shown if environment variable is not set */}
       <Dialog open={apiKeyDialogOpen} onOpenChange={setApiKeyDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -78,8 +79,9 @@ const Index = () => {
                 className="text-primary underline-offset-4 hover:underline"
               >
                 Google AI Studio
-              </a>
-              .
+              </a>.
+              <br /><br />
+              <strong>Note:</strong> You can also set the VITE_GEMINI_API_KEY environment variable to avoid this prompt.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSetApiKey} className="space-y-4">

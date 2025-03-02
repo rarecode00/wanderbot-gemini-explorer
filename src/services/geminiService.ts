@@ -36,16 +36,23 @@ export interface TravelPlan {
 }
 
 const API_KEY_LOCAL_STORAGE_KEY = "geminiApiKey";
+const GEMINI_ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 /**
- * Get the Gemini API key from local storage
+ * Get the Gemini API key from environment variable or local storage as fallback
  */
 export const getApiKey = (): string | null => {
+  // First try to get the key from environment variable
+  if (GEMINI_ENV_API_KEY) {
+    return GEMINI_ENV_API_KEY;
+  }
+  
+  // Fallback to local storage if env variable is not set
   return localStorage.getItem(API_KEY_LOCAL_STORAGE_KEY);
 };
 
 /**
- * Set the Gemini API key in local storage
+ * Set the Gemini API key in local storage (only used as fallback when env variable is not set)
  * @param apiKey - The Gemini API key to set
  */
 export const setApiKey = (apiKey: string): void => {
@@ -58,7 +65,7 @@ export const setApiKey = (apiKey: string): void => {
 export const generateTravelPlan = async (data: TravelFormData): Promise<TravelPlan> => {
   const apiKey = getApiKey();
   if (!apiKey) {
-    throw new Error("API key not found. Please set your Gemini API key.");
+    throw new Error("API key not found. Please set your Gemini API key in environment variable VITE_GEMINI_API_KEY or in the settings.");
   }
 
   const startDateStr = data.startDate.toLocaleDateString();
@@ -191,7 +198,7 @@ export const askFollowUpQuestion = async (
 ): Promise<string> => {
   const apiKey = getApiKey();
   if (!apiKey) {
-    throw new Error("API key not found. Please set your Gemini API key.");
+    throw new Error("API key not found. Please set your Gemini API key in environment variable VITE_GEMINI_API_KEY or in the settings.");
   }
 
   const daysMatch = dates.match(/\d+\/\d+\/\d+\s+to\s+\d+\/\d+\/\d+\s+\((\d+)\s+days\)/);
